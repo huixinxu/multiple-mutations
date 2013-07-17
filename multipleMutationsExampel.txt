@@ -1,0 +1,12 @@
+##This file is inactive.  It is an example of what is returned by 'multiple_hits_onelist.py'. Delete this line before use.
+AGBL5	missense/silent
+GH2	missense/silent
+FAM157B	missense/missense/missense
+GLIS1	silent/missense
+UGT2B4	missense/missense
+CSNK1G3	missense/frameshift
+TTN	missense/missense
+TMPRSS15	missense/missense
+AHNAK2	missense/missense
+SYNE2	missense/missense
+USP34	missense/missense

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<head>
+	<title>Your Data!</title>
+</head>
+
+<body>
+	<table border="1">
+		{% for d in range(0, iterations): %}
+			<tr>
+				{% for y in results[d].split() %}
+					<td>{{y}}</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+	</table>
+	
+	<a href="{{ url_for('downloadFile', dataToSend=downloadString) }}">
+		<button type="button">Download Your Data</button>
+	</a>
+	
+</body>
