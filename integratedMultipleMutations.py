@@ -27,6 +27,8 @@ from flask import Flask, request, Response, session, g, redirect, url_for, \
 	abort, render_template, flash, send_from_directory, send_file
 from werkzeug import secure_filename
 import StringIO
+import multiple_hits_onelist_noprint
+import overlap2mutprobs
 
 DEBUG = True#do not use when site is public (allows for easier error catching during debugging)
 UPLOAD_FOLDER = '/Users/michaelchess/PythonPrograms/multipleMutationsStatisticalSignificance'#datasaving folder path
@@ -53,11 +55,13 @@ def uploadFile():
 	else:
 		return "Your file was of an incorrect type, please change file type to .txt and try again."
 	repeatMutations = runMultipleMuts(dataName)
+	argsForScript = [repeatMutations, 'fixed_mut_prob_fs_adjdepdiv.txt', float(numSubjects)]
+	dout = overlap2mutprobs.main(argsForScript)
+	#command = "python overlap2mutprobs_1.2.py " + repeatMutations +" fixed_mut_prob_fs_adjdepdiv.txt " + numSubjects#initial command line arguement
+	#args = command.split()#splitting command line into individual args
+	#output = subprocess.Popen(args, stdout=subprocess.PIPE, shell=False)#run the script
+	#dout, derr = output.communicate()#getting the output of the script
 	
-	command = "python overlap2mutprobs_1.2.py " + repeatMutations +" fixed_mut_prob_fs_adjdepdiv.txt " + numSubjects#initial command line arguement
-	args = command.split()#splitting command line into individual args
-	output = subprocess.Popen(args, stdout=subprocess.PIPE, shell=False)#run the script
-	dout, derr = output.communicate()#getting the output of the script
 	#print dout#printing to make sure it works
 	noCommas = dout.replace(", ", "|")#replacing commas between types of mutations to avoid confusion in csv files
 	addCommas = noCommas.replace("\t", ",")#adding commas between data fields for csv file
@@ -68,10 +72,11 @@ def uploadFile():
 	return render_template('ReturnData.html', results=addReturns, iterations=numRows, downloadString=addCommas)#render the ReturnData.html with required data atributes.  These are the results as an array of lines, the number of lines, and the results as a comma delimited string
 
 def runMultipleMuts(initialFile):
-	theCommand = "python multiple_hits_onelist.py "+initialFile
-	arguments = theCommand.split()
-	multipleMutsOutput = subprocess.Popen(arguments, stdout=subprocess.PIPE, shell=False)
-	out, err = multipleMutsOutput.communicate()
+	#theCommand = "python multiple_hits_onelist.py "+initialFile
+	#arguments = theCommand.split()
+	#multipleMutsOutput = subprocess.Popen(arguments, stdout=subprocess.PIPE, shell=False)
+	#out, err = multipleMutsOutput.communicate()
+	out = multiple_hits_onelist_noprint.runFile(open(initialFile, 'r'))
 	multiOutFile = tempfile.NamedTemporaryFile(delete=False)
 	multiOutFile.write(out)
 	multiOutFile.close()
