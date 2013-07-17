@@ -29,7 +29,7 @@ from werkzeug import secure_filename
 import StringIO
 
 DEBUG = True#do not use when site is public (allows for easier error catching during debugging)
-UPLOAD_FOLDER = '/Users/michaelchess/PythonPrograms/integratedMultipleMutations'#datasaving folder path
+UPLOAD_FOLDER = '/Users/michaelchess/PythonPrograms/multipleMutationsStatisticalSignificance'#datasaving folder path
 ALLOWED_EXTENSIONS = set(['txt'])#Currently not used allows for easy file limiting
 app = Flask(__name__)
 app.config.from_object(__name__)
