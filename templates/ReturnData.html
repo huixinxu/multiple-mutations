@@ -6,6 +6,20 @@
 
 <body>
 	<table border="1">
+		<tr>
+			<td><b>Gene Name</b></td>
+			<td><b>Mutations</b></td>
+			<td><b>#LoF</b></td>
+			<td><b>#Mis</b></td>
+			<td><b>Prob(LoF)</b></td>
+			<td><b>Prob(mis)</b></td>
+			<td><b>Prob(LoF+mis)</b></td>
+			<td><b>2*prob</b></td>
+			<td><b>exp#(343)</b></td>
+			<td><b>ppois</b></td>
+			<td><b>Compared to</b></td>
+			
+		</tr>
 		{% for d in range(0, iterations): %}
 			<tr>
 				{% for y in results[d].split() %}

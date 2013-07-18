@@ -84,8 +84,9 @@ def runMultipleMuts(initialFile):
 
 @app.route('/download/<dataToSend>')
 def downloadFile(dataToSend):
-	print "About to Return File"
+	#print "About to Return File"
 	sendableString = StringIO.StringIO()#make sendableString into an easily transferrable StringIO object.
+	sendableString.write('#gene	mutations,#LoF,#mis,prob(LoF),prob(mis),prob(LoF+mis),2*prob,exp#[151.0],ppois,compared_to')
 	sendableString.write(str(dataToSend))#write data to it
 	sendableString.seek(0)#send marker to the first position
 	return send_file(sendableString, attachment_filename="YourData.csv", as_attachment=True)#return sendableString as an attachment
