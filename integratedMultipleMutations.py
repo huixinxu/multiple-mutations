@@ -31,7 +31,7 @@ import multiple_hits_onelist_noprint
 import overlap2mutprobs
 
 DEBUG = True#do not use when site is public (allows for easier error catching during debugging)
-UPLOAD_FOLDER = '/Users/michaelchess/PythonPrograms/multipleMutationsStatisticalSignificance'#datasaving folder path
+UPLOAD_FOLDER = '/multipleMutationsStatisticalSignificance'#datasaving folder path
 ALLOWED_EXTENSIONS = set(['txt'])#Currently not used allows for easy file limiting
 app = Flask(__name__)
 app.config.from_object(__name__)
