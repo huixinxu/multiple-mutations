@@ -24,7 +24,7 @@ def runFile(genelist1):
 			multi_hits[line[0]] = types 
 		else:
 			all_genes[line[0]] = [line[1]]
-	print returnStuff()
+	#print returnStuff()
 	return returnStuff()
 
 def returnStuff():
@@ -33,6 +33,8 @@ def returnStuff():
 		changes = '/'.join(values)
 		returnString+=('\t'.join([key, changes]))
 		returnString+='\n'
+	all_genes.clear()
+	multi_hits.clear()
 	return returnString
 #geneList = open('exampleData.txt', 'r')
 #runFile(geneList)

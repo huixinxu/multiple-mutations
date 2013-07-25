@@ -31,7 +31,7 @@ import multiple_hits_onelist_noprint
 import overlap2mutprobs
 
 DEBUG = True#do not use when site is public (allows for easier error catching during debugging)
-UPLOAD_FOLDER = '/multipleMutationsStatisticalSignificance'#datasaving folder path
+UPLOAD_FOLDER = os.getcwd()
 ALLOWED_EXTENSIONS = set(['txt'])#Currently not used allows for easy file limiting
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -76,7 +76,9 @@ def runMultipleMuts(initialFile):
 	#arguments = theCommand.split()
 	#multipleMutsOutput = subprocess.Popen(arguments, stdout=subprocess.PIPE, shell=False)
 	#out, err = multipleMutsOutput.communicate()
-	out = multiple_hits_onelist_noprint.runFile(open(initialFile, 'r'))
+	theFile = open(initialFile, 'r')
+	out = multiple_hits_onelist_noprint.runFile(theFile)
+	theFile.close()
 	multiOutFile = tempfile.NamedTemporaryFile(delete=False)
 	multiOutFile.write(out)
 	multiOutFile.close()
