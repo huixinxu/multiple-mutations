@@ -40,7 +40,36 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER#configuring file to save data
 @app.route('/')
 def openPage():
 	#calls initial html
-	return render_template('UploadPage.html')
+	if 'username' in session:
+		return render_template('UploadPage.html')
+	return redirect(url_for('login'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+    	if request.form['username'] == 'ATGUuser':
+        	session['username'] = request.form['username']
+        	return redirect(url_for('openPage'))
+        else:
+        	return '''
+    			<p>Incorrect Username
+        		<form action="" method="post">
+        		    <p><input type=text name=username>
+        		    <p><input type=submit value=Login>
+        		</form>
+        		'''
+    return '''
+        <form action="" method="post">
+            <p><input type=text name=username>
+            <p><input type=submit value=Login>
+        </form>
+        '''
+
+@app.route('/logout')
+def logout():
+    # remove the username from the session if it's there
+    session.pop('username', None)
+    return redirect(url_for('openPage'))
 
 def allowedFile(filename):
 	#checks if uploaded file is of the correct type
@@ -51,13 +80,18 @@ def allowedFile(filename):
 def uploadFile():
 	#handles data from the form in UploadPage.html
 	#gets the file and the number of subjects
-	userData = request.files['userData']
 	numSubjects = request.form['subjects']
-	if userData and allowedFile(userData.filename):
-		dataName = secure_filename(userData.filename)
-		userData.save(os.path.join(app.config['UPLOAD_FOLDER'], dataName))
+	if request.form['inputType'] == '1':
+		userData = request.files['userData']
+		if userData and allowedFile(userData.filename):
+			dataName = secure_filename(userData.filename)
+			userData.save(os.path.join(app.config['UPLOAD_FOLDER'], dataName))
+		else:
+			return "Your file was of an incorrect type, please change file type to .txt and try again."
 	else:
-		return "Your file was of an incorrect type, please change file type to .txt and try again."
+		dataFile = open('userData.txt', 'r+')
+		dataFile.write(request.form['userInput'])
+		dataName = 'userData.txt'
 	repeatMutations = runMultipleMuts(dataName)
 	argsForScript = [repeatMutations, 'fixed_mut_prob_fs_adjdepdiv.txt', float(numSubjects)]
 	dout = overlap2mutprobs.main(argsForScript)
@@ -93,6 +127,9 @@ def exampleDownload():
 	#allows the download of an example file
 	exampleData = open('exampleData.txt', 'r')
 	return send_file(exampleData, attachment_filename="ExampleInputData.txt", as_attachment=True)
-	
+
+# set the secret key.  keep this really secret:
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+
 if __name__ == '__main__':
 	app.run()#initialization function

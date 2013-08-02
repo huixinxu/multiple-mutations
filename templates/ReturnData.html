@@ -9,7 +9,6 @@
 	<table border="1" class="sortable">
 		<tr>
 			<td><b>Gene Name</b></td>
-			<td><b>Mutations</b></td>
 			<td><b>#LoF</b></td>
 			<td><b>#Mis</b></td>
 			<td><b>Prob(LoF)</b></td>
@@ -23,8 +22,10 @@
 		</tr>
 		{% for d in range(0, iterations): %}
 			<tr>
-				{% for y in results[d].split() %}
-					<td>{{y}}</td>
+				{% for y in range(0, results[d].split()|length): %}
+					{% if not y == 1: %}
+						<td>{{results[d].split()[y]}}</td>
+					{% endif %}
 				{% endfor %}
 			</tr>
 		{% endfor %}

@@ -16,10 +16,23 @@
 				</a>
 			<dt>--------------------------------------------------------------------------------
 			<dt><b>Please submit your data:</b>
-			<dd>Your data file:<input type="file" name="userData">
+			<dt><input type="radio" id="rFile" name="inputType" value="1">File
+			<dt><input type="radio" id="rTextArea" name="inputType" value="2">Text Area
+			<dd>Your data:<input type="file" id="file" name="userData" style="display: none;">
+			<dd><textarea rows="10" cols="30" id="textArea" name="userInput" style="display: none;"></textarea>
 			<dd>The number of study participants:<input type="number" name="subjects">
 			<dd><input type="submit" value="Submit">
 		</dl>
 	</form>
+	<script type="text/javascript">
+		document.getElementById('rFile').onchange=function(){
+			document.getElementById('file').style.display = 'inline';
+			document.getElementById('textArea').style.display = 'none';
+		};
+		document.getElementById('rTextArea').onclick=function(){
+			document.getElementById('file').style.display = 'none';
+			document.getElementById('textArea').style.display = 'inline';
+		};
+	</script>
 </body>
 </html>
