@@ -98,9 +98,34 @@ def uploadFile():
 	noCommas = dout.replace(", ", "|")
 	addCommas = noCommas.replace("\t", ",")
 	addTabs = noCommas
-	addReturns = addTabs.split("\n")
+	addReturns = addTabs.split('\n')
+	#addReturns = addReturns.split('\t')
+	roundReturns = []
+	#for row in addReturns:
+	#	roundReturns.append(row.split('\t'))
+	finalReturns = []
+	for row in addReturns:
+		row = row.split('\t')
+		returnRow = []
+		for piece in row:
+			try:
+				returnRow.append(round_to_n(float(piece), 3))
+			except ValueError:
+				returnRow.append(piece)
+		if len(returnRow) >3:
+			returnRow[2] = int(returnRow[2])
+			returnRow[3] = int(returnRow[3])
+		finalReturns.append(returnRow)
 	numRows= len(addReturns)
-	return render_template('ReturnData.html', results=addReturns, iterations=numRows, downloadString=addCommas)
+	return render_template('ReturnData.html', results=finalReturns, iterations=numRows, downloadString=addCommas)
+
+def round_to_n(x, n):
+    if n < 1:
+        raise ValueError("number of significant digits must be >= 1")
+    # Use %e format to get the n most significant digits, as a string.
+    format = "%." + str(n-1) + "e"
+    as_string = format % x
+    return float(as_string)
 
 def runMultipleMuts(initialFile):
 	#takes a file name and runs multiple_hits_onelist_noprint.py on it

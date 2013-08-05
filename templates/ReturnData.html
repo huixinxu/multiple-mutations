@@ -22,11 +22,13 @@
 		</tr>
 		{% for d in range(0, iterations): %}
 			<tr>
-				{% for y in range(0, results[d].split()|length): %}
-					{% if not y == 1: %}
-						<td>{{results[d].split()[y]}}</td>
-					{% endif %}
-				{% endfor %}
+				{% if results[d]|length > 9: %}
+					{% for y in range(0, results[d]|length): %}
+						{% if not y == 1: %}
+							<td>{{results[d][y]}}</td>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
 			</tr>
 		{% endfor %}
 	</table>
