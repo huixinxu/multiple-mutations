@@ -21,20 +21,54 @@
 			
 		</tr>
 		{% for d in range(0, iterations): %}
-			<tr>
-				{% if results[d]|length > 9: %}
-					{% for y in range(0, results[d]|length): %}
-						{% if not y == 1: %}
-							<td>{{results[d][y]}}</td>
-						{% endif %}
-					{% endfor %}
-				{% endif %}
-			</tr>
+			{% if results[d][10] != 'LoF': %}
+				<tr>
+					{% if results[d]|length > 9: %}
+						{% for y in range(0, results[d]|length): %}
+							{% if not y == 1: %}
+								<td>{{results[d][y]}}</td>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+				</tr>
+			{% endif %}
+		{% endfor %}
+	</table>
+	<p></p>
+	<table border="1" class="sortable">
+		<tr>
+			<td><b>Gene Name</b></td>
+			<td><b>#LoF</b></td>
+			<td><b>#Mis</b></td>
+			<td><b>Prob(LoF)</b></td>
+			<td><b>Prob(mis)</b></td>
+			<td><b>Prob(LoF+mis)</b></td>
+			<td><b>2*prob</b></td>
+			<td><b>exp#(343)</b></td>
+			<td><b>ppois</b></td>
+			<td><b>Compared to</b></td>
+			
+		</tr>
+		{% for d in range(0, iterations): %}
+			{% if results[d][10] == 'LoF': %}
+				<tr>
+					{% if results[d]|length > 9: %}
+						{% for y in range(0, results[d]|length): %}
+							{% if not y == 1: %}
+								<td>{{results[d][y]}}</td>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+				</tr>
+			{% endif %}
 		{% endfor %}
 	</table>
 	
 	<a href="{{ url_for('downloadFile', dataToSend=downloadString) }}">
 		<button type="button">Download Your Data</button>
 	</a>
+	<script>
+		
+	</script>
 	
 </body>
