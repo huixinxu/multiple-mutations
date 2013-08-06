@@ -148,13 +148,17 @@ def downloadFile(dataToSend):
 	sendableString.write('#gene	mutations,#LoF,#mis,prob(LoF),prob(mis),prob(LoF+mis),2*prob,exp#[151.0],ppois,compared_to')
 	sendableString.write(str(dataToSend))
 	sendableString.seek(0)
-	return send_file(sendableString, attachment_filename="YourData.csv", as_attachment=True)
+	time = datetime.now()
+	splitTime = str(time).rsplit('.', 1)[0]
+	return send_file(sendableString, attachment_filename="YourData "+splitTime+".csv", as_attachment=True)
 
 @app.route('/exampleData')
 def exampleDownload():
 	#allows the download of an example file
 	exampleData = open('exampleData.txt', 'r')
-	return send_file(exampleData, attachment_filename="ExampleInputData.txt", as_attachment=True)
+	time = datetime.now()
+	splitTime = str(time).rsplit('.', 1)[0]
+	return send_file(exampleData, attachment_filename="ExampleInputData "+splitTime+".txt", as_attachment=True)
 
 # set the secret key.  keep this really secret:
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
