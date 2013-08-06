@@ -37,6 +37,9 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER#configuring file to save data
 
+SERVER_NAME = '127.0.0.1'
+SERVER_PORT = 5002
+
 @app.route('/')
 def openPage():
 	#calls initial html
@@ -157,4 +160,4 @@ def exampleDownload():
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 if __name__ == '__main__':
-	app.run()#initialization function
+	app.run(SERVER_NAME, SERVER_PORT)#initialization function
