@@ -29,6 +29,7 @@ from werkzeug import secure_filename
 import StringIO
 import multiple_hits_onelist_noprint
 import overlap2mutprobs
+from datetime import datetime
 
 DEBUG = True#do not use when site is public (allows for easier error catching during debugging)
 UPLOAD_FOLDER = os.getcwd()
@@ -83,44 +84,42 @@ def allowedFile(filename):
 def uploadFile():
 	#handles data from the form in UploadPage.html
 	#gets the file and the number of subjects
-	numSubjects = request.form['subjects']
-	if request.form['inputType'] == '1':
-		userData = request.files['userData']
-		if userData and allowedFile(userData.filename):
-			dataName = secure_filename(userData.filename)
-			userData.save(os.path.join(app.config['UPLOAD_FOLDER'], dataName))
+	if request.method == 'POST':
+		numSubjects = request.form['subjects']
+		if request.form['inputType'] == '1':
+			userData = request.files['userData']
+			if userData and allowedFile(userData.filename):
+				dataName = secure_filename(userData.filename)
+				userData.save(os.path.join(app.config['UPLOAD_FOLDER'], dataName))
+			else:
+				return "Your file was of an incorrect type, please change file type to .txt and try again."
 		else:
-			return "Your file was of an incorrect type, please change file type to .txt and try again."
-	else:
-		dataFile = open('userData.txt', 'r+')
-		dataFile.write(request.form['userInput'])
-		dataName = 'userData.txt'
-	repeatMutations = runMultipleMuts(dataName)
-	argsForScript = [repeatMutations, 'fixed_mut_prob_fs_adjdepdiv.txt', float(numSubjects)]
-	dout = overlap2mutprobs.main(argsForScript)
-	noCommas = dout.replace(", ", "|")
-	addCommas = noCommas.replace("\t", ",")
-	addTabs = noCommas
-	addReturns = addTabs.split('\n')
-	#addReturns = addReturns.split('\t')
-	roundReturns = []
-	#for row in addReturns:
-	#	roundReturns.append(row.split('\t'))
-	finalReturns = []
-	for row in addReturns:
-		row = row.split('\t')
-		returnRow = []
-		for piece in row:
-			try:
-				returnRow.append(round_to_n(float(piece), 3))
-			except ValueError:
-				returnRow.append(piece)
-		if len(returnRow) >3:
-			returnRow[2] = int(returnRow[2])
-			returnRow[3] = int(returnRow[3])
-		finalReturns.append(returnRow)
-	numRows= len(addReturns)
-	return render_template('ReturnData.html', results=finalReturns, iterations=numRows, downloadString=addCommas)
+			dataFile = open('userData.txt', 'r+')
+			dataFile.write(request.form['userInput'])
+			dataName = 'userData.txt'
+		repeatMutations = runMultipleMuts(dataName)
+		argsForScript = [repeatMutations, 'fixed_mut_prob_fs_adjdepdiv.txt', float(numSubjects)]
+		dout = overlap2mutprobs.main(argsForScript)
+		noCommas = dout.replace(", ", "|")
+		addCommas = noCommas.replace("\t", ",")
+		addTabs = noCommas
+		addReturns = addTabs.split('\n')
+		roundReturns = []
+		finalReturns = []
+		for row in addReturns:
+			row = row.split('\t')
+			returnRow = []
+			for piece in row:
+				try:
+					returnRow.append(round_to_n(float(piece), 3))
+				except ValueError:
+					returnRow.append(piece)
+			if len(returnRow) >3:
+				returnRow[2] = int(returnRow[2])
+				returnRow[3] = int(returnRow[3])
+			finalReturns.append(returnRow)
+		numRows= len(addReturns)
+		return render_template('ReturnData.html', results=finalReturns, iterations=numRows, downloadString=addCommas, numSubjects=numSubjects)
 
 def round_to_n(x, n):
     if n < 1:
@@ -145,12 +144,12 @@ def runMultipleMuts(initialFile):
 def downloadFile(dataToSend):
 	#takes dataToSend and returns it as a download
 	sendableString = StringIO.StringIO()
-	sendableString.write('#gene	mutations,#LoF,#mis,prob(LoF),prob(mis),prob(LoF+mis),2*prob,exp#[151.0],ppois,compared_to')
+	sendableString.write('#gene	mutations, mutations, #LoF,#mis,prob(LoF),prob(mis),prob(LoF+mis),2*prob,exp#[151.0],ppois,compared_to\n')
 	sendableString.write(str(dataToSend))
 	sendableString.seek(0)
 	time = datetime.now()
 	splitTime = str(time).rsplit('.', 1)[0]
-	return send_file(sendableString, attachment_filename="YourData "+splitTime+".csv", as_attachment=True)
+	return send_file(sendableString, attachment_filename="SOME Results "+splitTime+".csv", as_attachment=True)
 
 @app.route('/exampleData')
 def exampleDownload():
@@ -158,7 +157,7 @@ def exampleDownload():
 	exampleData = open('exampleData.txt', 'r')
 	time = datetime.now()
 	splitTime = str(time).rsplit('.', 1)[0]
-	return send_file(exampleData, attachment_filename="ExampleInputData "+splitTime+".txt", as_attachment=True)
+	return send_file(exampleData, attachment_filename="Example SOME Input "+splitTime+".txt", as_attachment=True)
 
 # set the secret key.  keep this really secret:
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
