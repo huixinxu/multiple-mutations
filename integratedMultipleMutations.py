@@ -159,8 +159,8 @@ def exampleDownload():
 	splitTime = str(time).rsplit('.', 1)[0]
 	return send_file(exampleData, attachment_filename="Example SOME Input "+splitTime+".txt", as_attachment=True)
 
-# set the secret key.  keep this really secret:
+# set the secret key (keep this the same as other utilities to have cross utility logins)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 if __name__ == '__main__':
-	app.run(SERVER_NAME, SERVER_PORT)#initialization function
+	app.run()#initialization function
