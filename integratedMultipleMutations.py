@@ -1,5 +1,5 @@
 '''
-overlap2mutprobsInterface.py is a web interface for the python script to calculate
+integratedMultipleMutations.py is a web interface for the python script to calculate
 the statistical significance of multiple de novo events found in any specific gene.
 The interface uses two html templates (ReturnData.html and UploadPage.html) to allow
 a public user to use the overlap2mutprobs.py script on their own data.
